@@ -2,9 +2,10 @@ import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
-import {Text} from 'react-native'
+import {StyleSheet, ScrollView} from 'react-native'
 
 import { SafeAreaView } from 'react-native-safe-area-context';
+import ItemTile from '@/components/item';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -25,8 +26,38 @@ export default function RootLayout() {
   }
 
   return (
-    <SafeAreaView>
-      <Text>Testing</Text>
+    <SafeAreaView style={styles.container}>
+      <ScrollView style={styles.scrollview}>
+      <ItemTile />
+      <ItemTile />
+      <ItemTile />
+      <ItemTile />
+      <ItemTile />
+      <ItemTile />
+      <ItemTile />
+      <ItemTile />
+      <ItemTile />
+      <ItemTile />
+      <ItemTile />
+      <ItemTile />
+      <ItemTile />
+      <ItemTile />
+      <ItemTile />
+      <ItemTile />
+      <ItemTile />
+      <ItemTile />
+      <ItemTile />
+      </ScrollView>
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 10,
+    
+  },
+  scrollview: {
+    flexDirection: 'column',
+  }
+});
