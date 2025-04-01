@@ -12,7 +12,6 @@ const ItemTile = () => {
         <Icon name="edit" size={24} color="black" style={styles.deleteIcon} />
       </View>
     </View>
-
   );
 };
 
