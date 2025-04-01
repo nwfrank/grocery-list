@@ -1,16 +1,18 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { Animated, PanResponder, View, Text, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const ItemTile = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Hello, World!</Text>
+      <View style={styles.textContainer}>
+        <Text style={styles.text}>Centered Text</Text>
+      </View>
       <View style={styles.iconContainer}>
         <Icon name="edit" size={24} color="black" style={styles.deleteIcon} />
-        <Icon name="drag-handle" size={24} color="black" style={styles.dragIcon} />
       </View>
     </View>
+
   );
 };
 
@@ -19,16 +21,17 @@ const styles = StyleSheet.create({
     height: 50,
     borderWidth: 1,
     borderColor: 'gray',
-    borderRadius: 10,
     justifyContent: 'center',
-    margin: 5,
-    flexDirection: 'row', // Align items horizontally
-    paddingRight: 10, // Add padding to prevent icons from touching the edge
+    flexDirection: 'row',
+    paddingRight: 10,
+  },
+  textContainer: {
+    flex: 1,
+    justifyContent: 'center',
   },
   text: {
     fontSize: 20,
     color: 'black',
-    flex: 1, // This makes the text take available space
   },
   iconContainer: {
     flexDirection: 'row',
