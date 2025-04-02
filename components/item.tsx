@@ -10,6 +10,7 @@ const ItemTile = () => {
       </View>
       <View style={styles.iconContainer}>
         <Icon name="edit" size={24} color="black" style={styles.deleteIcon} />
+        <Icon name="delete" size={24} color="black" style={styles.deleteIcon} />
       </View>
     </View>
   );
