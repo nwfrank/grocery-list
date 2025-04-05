@@ -16,6 +16,8 @@ export default function RootLayout() {
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
 
+  const items = ['test1', 'test2', 'test3', 'test4', 'test5'];
+
   useEffect(() => {
     if (loaded) {
       SplashScreen.hideAsync();
@@ -29,25 +31,7 @@ export default function RootLayout() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollview}>
-      <ItemTile />
-      <ItemTile />
-      <ItemTile />
-      <ItemTile />
-      <ItemTile />
-      <ItemTile />
-      <ItemTile />
-      <ItemTile />
-      <ItemTile />
-      <ItemTile />
-      <ItemTile />
-      <ItemTile />
-      <ItemTile />
-      <ItemTile />
-      <ItemTile />
-      <ItemTile />
-      <ItemTile />
-      <ItemTile />
-      <ItemTile />
+        {items.map((item) => <ItemTile item={item}/>)}
       <View style={styles.pad} />
       </ScrollView>
       <View style={styles.add}>
@@ -60,7 +44,8 @@ export default function RootLayout() {
 const styles = StyleSheet.create({
   container: {
     padding: 10,
-    position: 'relative'
+    position: 'relative',
+    flex: 1
   },
   scrollview: {
     flexDirection: 'column',

@@ -2,11 +2,11 @@ import React, { useRef, useState } from 'react';
 import { Animated, PanResponder, View, Text, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-const ItemTile = () => {
+const ItemTile = ({item}: {item: string}) => {
   return (
     <View style={styles.container}>
       <View style={styles.textContainer}>
-        <Text style={styles.text}>Centered Text</Text>
+        <Text style={styles.text}>{item}</Text>
       </View>
       <View style={styles.iconContainer}>
         <Icon name="edit" size={24} color="black" style={styles.deleteIcon} />
