@@ -1,0 +1,48 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+export type ShoppingItem = {
+  item: string;
+  amount: number;
+  label: string;
+};
+
+const STORAGE_KEY = "shopping_list";
+
+export const setShoppingList = async (list: ShoppingItem[]): Promise<void> => {
+  try {
+    await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+  } catch (e) {
+    console.error("Error saving shopping list:", e);
+  }
+};
+
+export const getShoppingList = async (): Promise<ShoppingItem[]> => {
+  try {
+    const jsonValue = await AsyncStorage.getItem(STORAGE_KEY);
+    return jsonValue != null ? JSON.parse(jsonValue) : [];
+  } catch (e) {
+    console.error("Error loading shopping list:", e);
+    return [];
+  }
+};
+
+export const addOrUpdateItem = async (newItem: ShoppingItem): Promise<void> => {
+  const currentList = await getShoppingList();
+  const index = currentList.findIndex(
+    (i) => i.item.toLowerCase() === newItem.item.toLowerCase()
+  );
+  if (index !== -1) {
+    currentList[index].amount = newItem.amount;
+  } else {
+    currentList.push(newItem);
+  }
+  await setShoppingList(currentList);
+};
+
+export const removeItem = async (itemName: string): Promise<void> => {
+  const currentList = await getShoppingList();
+  const newList = currentList.filter(
+    (i) => i.item.toLowerCase() !== itemName.toLowerCase()
+  );
+  await setShoppingList(newList);
+};
