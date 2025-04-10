@@ -2,7 +2,18 @@ import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect, useState } from "react";
 import "react-native-reanimated";
-import { StyleSheet, ScrollView, View, Text, FlatList } from "react-native";
+import {
+  StyleSheet,
+  ScrollView,
+  View,
+  Text,
+  FlatList,
+  Modal,
+  TextInput,
+  Button,
+  Touchable,
+  TouchableOpacity,
+} from "react-native";
 
 import { SafeAreaView } from "react-native-safe-area-context";
 import ListItem from "@/components/ListItem";
@@ -22,6 +33,27 @@ export default function RootLayout() {
   });
 
   const [items, setItems] = useState<ShoppingItem[]>([]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [itemName, setItemName] = useState("");
+  const [itemAmount, setItemAmount] = useState("");
+  const [itemLabel, setItemLabel] = useState("");
+
+  const addItem = () => {
+    if (!itemName || !itemAmount) return;
+
+    const newItem: ShoppingItem = {
+      item: itemName,
+      amount: parseInt(itemAmount, 10),
+      id: 0,
+      label: itemLabel,
+    };
+
+    setItems((prev) => [...prev, newItem]);
+    setItemName("");
+    setItemAmount("");
+    setModalVisible(false);
+    addOrUpdateItem(newItem);
+  };
 
   const handleDeleteItem = (id: number) => {
     const updatedData = items.filter((item) => item.id !== id);
@@ -36,12 +68,6 @@ export default function RootLayout() {
 
   useEffect(() => {
     (async () => {
-      await addOrUpdateItem({
-        id: 1,
-        item: "bananas",
-        amount: 3,
-        label: "lbs",
-      });
       const list = await getShoppingList();
       setItems(list);
     })();
@@ -62,9 +88,45 @@ export default function RootLayout() {
         renderItem={renderItem}
         keyExtractor={(item) => item.id.toString()}
       />
-      <View style={styles.add}>
+      <TouchableOpacity
+        style={styles.add}
+        onPress={() => setModalVisible(true)}
+      >
         <Icon name="add" size={40} color="white" style={styles.addIcon} />
-      </View>
+      </TouchableOpacity>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalBackground}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Add Item</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Item name"
+              value={itemName}
+              onChangeText={setItemName}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Quantity"
+              value={itemAmount}
+              onChangeText={setItemAmount}
+              keyboardType="numeric"
+            />
+            <View style={styles.modalButtons}>
+              <Button title="Add" onPress={addItem} />
+              <Button
+                title="Cancel"
+                color="gray"
+                onPress={() => setModalVisible(false)}
+              />
+            </View>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -93,5 +155,31 @@ const styles = StyleSheet.create({
   pad: {
     height: 60,
     width: "100%",
+  },
+  modalBackground: {
+    flex: 1,
+    justifyContent: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
+  modalContent: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 20,
+  },
+  modalTitle: {
+    fontSize: 20,
+    marginBottom: 15,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 6,
+    padding: 10,
+    marginBottom: 10,
+  },
+  modalButtons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
 });
