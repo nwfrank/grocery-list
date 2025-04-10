@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export type ShoppingItem = {
+  id: number;
   item: string;
   amount: number;
   label: string;
@@ -8,7 +9,7 @@ export type ShoppingItem = {
 
 const STORAGE_KEY = "shopping_list";
 
-export const setShoppingList = async (list: ShoppingItem[]): Promise<void> => {
+const setShoppingList = async (list: ShoppingItem[]): Promise<void> => {
   try {
     await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(list));
   } catch (e) {

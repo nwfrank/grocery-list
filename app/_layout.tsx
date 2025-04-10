@@ -7,6 +7,11 @@ import { StyleSheet, ScrollView, View, Text, FlatList } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ListItem from "@/components/ListItem";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import {
+  addOrUpdateItem,
+  getShoppingList,
+  ShoppingItem,
+} from "@/utils/shoppingListStorage";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -16,13 +21,7 @@ export default function RootLayout() {
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });
 
-  const [items, setItems] = useState([
-    { id: 1, text: "test1" },
-    { id: 2, text: "test2" },
-    { id: 3, text: "test3" },
-    { id: 4, text: "test4" },
-    { id: 5, text: "test5" },
-  ]);
+  const [items, setItems] = useState<ShoppingItem[]>([]);
 
   const handleDeleteItem = (id: number) => {
     const updatedData = items.filter((item) => item.id !== id);
@@ -35,11 +34,24 @@ export default function RootLayout() {
     }
   }, [loaded]);
 
+  useEffect(() => {
+    (async () => {
+      await addOrUpdateItem({
+        id: 1,
+        item: "bananas",
+        amount: 3,
+        label: "lbs",
+      });
+      const list = await getShoppingList();
+      setItems(list);
+    })();
+  }, []);
+
   if (!loaded) {
     return null;
   }
 
-  const renderItem = ({ item }: { item: { id: number; text: string } }) => (
+  const renderItem = ({ item }: { item: ShoppingItem }) => (
     <ListItem item={item} onDelete={handleDeleteItem} />
   );
 
@@ -48,7 +60,7 @@ export default function RootLayout() {
       <FlatList
         data={items}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id.toString()}
       />
       <View style={styles.add}>
         <Icon name="add" size={40} color="white" style={styles.addIcon} />

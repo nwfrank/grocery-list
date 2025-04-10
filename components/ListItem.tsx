@@ -1,3 +1,4 @@
+import { ShoppingItem } from "@/utils/shoppingListStorage";
 import React, { useRef, useState } from "react";
 import {
   Animated,
@@ -13,7 +14,7 @@ const ListItem = ({
   item,
   onDelete,
 }: {
-  item: { id: number; text: string };
+  item: ShoppingItem;
   onDelete: Function;
 }) => {
   const translateX = useRef(new Animated.Value(0)).current;
@@ -71,7 +72,7 @@ const ListItem = ({
     >
       <View style={styles.container} {...panResponder.panHandlers}>
         <View style={styles.textContainer}>
-          <Text style={styles.text}>{item.text}</Text>
+          <Text style={styles.text}>{item.item}</Text>
         </View>
         <View style={styles.iconContainer}>
           <Icon name="edit" size={24} color="black" style={styles.deleteIcon} />
