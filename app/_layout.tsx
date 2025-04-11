@@ -23,6 +23,7 @@ import {
   getShoppingList,
   ShoppingItem,
 } from "@/utils/shoppingListStorage";
+import { Picker } from "@react-native-picker/picker";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -103,12 +104,14 @@ export default function RootLayout() {
         <View style={styles.modalBackground}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Add Item</Text>
+
             <TextInput
               style={styles.input}
               placeholder="Item name"
               value={itemName}
               onChangeText={setItemName}
             />
+
             <TextInput
               style={styles.input}
               placeholder="Quantity"
@@ -116,6 +119,20 @@ export default function RootLayout() {
               onChangeText={setItemAmount}
               keyboardType="numeric"
             />
+
+            {/* Dropdown Picker */}
+            <View style={styles.pickerContainer}>
+              <Picker
+                selectedValue={itemLabel}
+                onValueChange={(itemValue) => setItemLabel(itemValue)}
+                style={styles.picker}
+              >
+                <Picker.Item label="-" value="-" />
+                <Picker.Item label="lbs" value="lbs" />
+                <Picker.Item label="g" value="g" />
+              </Picker>
+            </View>
+
             <View style={styles.modalButtons}>
               <Button title="Add" onPress={addItem} />
               <Button
@@ -181,5 +198,18 @@ const styles = StyleSheet.create({
   modalButtons: {
     flexDirection: "row",
     justifyContent: "space-between",
+  },
+  pickerContainer: {
+    marginVertical: 10,
+    height: 50, // Add this line
+    justifyContent: "center", // Optional, for vertical alignment
+    position: "relative",
+    overflow: "hidden",
+  },
+  picker: {
+    height: 215,
+    width: "110%",
+    marginLeft: -10,
+    position: "absolute",
   },
 });

@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export type ShoppingItem = {
-  id: number;
+  id?: number;
   item: string;
   amount: number;
   label: string;
@@ -29,10 +29,15 @@ export const getShoppingList = async (): Promise<ShoppingItem[]> => {
 
 export const addOrUpdateItem = async (newItem: ShoppingItem): Promise<void> => {
   const currentList = await getShoppingList();
-  const index = currentList.findIndex(
-    (i) => i.item.toLowerCase() === newItem.item.toLowerCase()
-  );
+  const index = currentList.findIndex((i) => i.id === newItem.id);
   if (index !== -1) {
+    let maxId = 0;
+    for (let i = 0; i < currentList.length; i++) {
+      if ((currentList[i].id as number) >= maxId) {
+        maxId = currentList[i].id as number;
+      }
+    }
+    newItem.id = maxId;
     currentList[index].amount = newItem.amount;
   } else {
     currentList.push(newItem);
